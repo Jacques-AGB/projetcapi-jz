@@ -1,8 +1,8 @@
 package com.master1.planningpoker.service.Assignment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.master1.planningpoker.dtos.request.AssignmentRequest;
-import com.master1.planningpoker.dtos.responses.AssignmentResponse;
+import com.master1.planningpoker.dtos.request.assignmentRequest.AddAssignmentRequest;
+import com.master1.planningpoker.dtos.responses.assignmentResponses.AssignmentResponse;
 import com.master1.planningpoker.mappers.assignmentMapper.AssignmentMapper;
 import com.master1.planningpoker.models.Assignment;
 import com.master1.planningpoker.models.Game;
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class AssignmentService implements IAssignmentService{
     private final GameRepository gameRepository;
 
     @Override
-    public AssignmentResponse addAssignment(AssignmentRequest request) {
+    public AssignmentResponse addEditAssignment(AddAssignmentRequest request) {
         boolean exists = assignmentRepository.existsByLibelle(request.getLibelle());
         if (exists) {
             throw new IllegalArgumentException("An assignment with the same libelle already exists.");
@@ -38,31 +39,51 @@ public class AssignmentService implements IAssignmentService{
         }
 
         // Create and save assignment
-        Assignment newAssignment = assignmentMapper.toEntity(request);
-        Assignment savedAssignment = assignmentRepository.save(newAssignment);
-        return assignmentMapper.toResponse(savedAssignment);
+        if (request.getId() == null){
+            Assignment newAssignment = assignmentMapper.toEntity(request);
+            Assignment savedAssignment = assignmentRepository.save(newAssignment);
+            return assignmentMapper.toResponse(savedAssignment);
+        }else {
+            Assignment existingAssignment = assignmentRepository.findById(request.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Assignment not found with id: " + request.getId()));
+
+            Game game = gameRepository.findById(request.getGameId())
+                    .orElseThrow(() -> new IllegalArgumentException("Game not found with id: " + request.getGameId()));
+
+            // Update fields
+            existingAssignment.setLibelle(request.getLibelle());
+            existingAssignment.setDescription(request.getDescription());
+            existingAssignment.setDifficulty(request.getDifficulty());
+            existingAssignment.setGame(game);
+
+            // Save updated assignment
+            Assignment updatedAssignment = assignmentRepository.save(existingAssignment);
+            return assignmentMapper.toResponse(updatedAssignment);
+        }
+
     }
 
     @Override
-    public List<Assignment> getBacklog(Long gameId) {
+    public List<AssignmentResponse> getBacklog(Long gameId) {
         // Check if the game exists
         boolean gameExists = gameRepository.existsById(gameId);
         if (!gameExists) {
             throw new IllegalArgumentException("Game not found for the given ID: " + gameId);
         }
-
-        // Retrieve all assignments linked to the game
         return assignmentRepository.findByGameId(gameId);
     }
 
+
+
     @Override
-    public void removeAssignment(Long assignmentId) {
+    public String removeAssignment(Long assignmentId) {
         // Check if the assignment exist
         boolean assignmentExist = assignmentRepository.existsById(assignmentId);
         if (!assignmentExist) {
             throw new IllegalArgumentException("Assignment not found for the given ID: " + assignmentId);
         }
         assignmentRepository.deleteById(assignmentId);
+        return "Assignment with id " + assignmentId + "removed successfully";
     }
 
     @Override
@@ -73,7 +94,7 @@ public class AssignmentService implements IAssignmentService{
             throw new IllegalArgumentException("Game not found for the given ID: " + gameId);
         }
         // get a specific game backlog
-        List<Assignment> backlog = assignmentRepository.findByGameId(gameId);
+        List<AssignmentResponse> backlog = assignmentRepository.findByGameId(gameId);
         // build and save backlog in a json file
         Path downloadDir = Paths.get(System.getProperty("user.home"), "Downloads", "backlog");
         File backlogDir = downloadDir.toFile();
@@ -89,6 +110,21 @@ public class AssignmentService implements IAssignmentService{
         } catch (IOException e) {
             throw new RuntimeException("Failed to write backlog to file: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public AssignmentResponse getAssignment(Long id) {
+        Assignment assignment = assignmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Assignment with id: " + id + "not found "));
+        return assignmentMapper.toResponse(assignment);
+    }
+
+    @Override
+    public List<AssignmentResponse> getAssignments() {
+         List<Assignment> assignments = assignmentRepository.findAll();
+        return assignments.stream()
+                .map(assignmentMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Override

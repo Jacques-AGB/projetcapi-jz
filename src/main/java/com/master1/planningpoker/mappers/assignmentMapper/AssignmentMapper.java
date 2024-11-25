@@ -1,7 +1,7 @@
 package com.master1.planningpoker.mappers.assignmentMapper;
 
-import com.master1.planningpoker.dtos.request.AssignmentRequest;
-import com.master1.planningpoker.dtos.responses.AssignmentResponse;
+import com.master1.planningpoker.dtos.request.assignmentRequest.AddAssignmentRequest;
+import com.master1.planningpoker.dtos.responses.assignmentResponses.AssignmentResponse;
 import com.master1.planningpoker.models.Assignment;
 import com.master1.planningpoker.models.Game;
 import com.master1.planningpoker.repositories.GameRepository;
@@ -15,7 +15,7 @@ public class AssignmentMapper {
         this.gameRepository = gameRepository;
     }
 
-    public Assignment toEntity(AssignmentRequest request) {
+    public Assignment toEntity(AddAssignmentRequest request) {
         Assignment assignment = new Assignment();
         assignment.setLibelle(request.getLibelle());
         assignment.setDescription(request.getDescription());
@@ -23,7 +23,6 @@ public class AssignmentMapper {
         Game game = gameRepository.findById(request.getGameId())
                 .orElseThrow(() -> new IllegalArgumentException("Game not found with ID: " + request.getGameId()));
         assignment.setGame(game);
-
         return assignment;
     }
 

@@ -1,11 +1,13 @@
 package com.master1.planningpoker.service.Game;
 
-import com.master1.planningpoker.models.Game;
+import com.master1.planningpoker.dtos.request.gameRequests.createGameRequest;
+import com.master1.planningpoker.dtos.responses.GameResponse;
+
+import java.util.List;
 
 public interface IGameService {
-    public Game createGame(String mode, int maxPlayers, Long ruleId);
-    public Game joinGame(String code, String email, String pseudo);
-    public Game getGameDetails(String code);
-    public void endGame(Long gameId);
-    public Game resumeGame(String jsonFilePath);
+    public GameResponse createEditGame(createGameRequest request);
+    public List<GameResponse> getGames();
+    public GameResponse getGameDetails(String code);
+    public String deleteGame(Long id);
 }

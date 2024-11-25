@@ -1,5 +1,6 @@
 package com.master1.planningpoker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,8 +12,9 @@ public class Rule {
     private Long id;
 
     @Column(nullable = false)
-    private String type;
+    private String name;
 
     @OneToOne(mappedBy = "rule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Game game;
 }

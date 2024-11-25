@@ -1,9 +1,8 @@
-package com.master1.planningpoker.dtos.responses;
+package com.master1.planningpoker.dtos.responses.assignmentResponses;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.master1.planningpoker.models.Game;
 import com.master1.planningpoker.models.Vote;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

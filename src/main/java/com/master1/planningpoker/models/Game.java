@@ -20,9 +20,6 @@ public class Game {
     @Column(nullable = false)
     private int maxPlayers;
 
-    @Column(nullable = false)
-    private String mode;
-
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Player> players;
 
