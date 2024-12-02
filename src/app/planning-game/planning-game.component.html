@@ -1,0 +1,32 @@
+<div class="container mt-5">
+    <!-- Titre et code de la partie -->
+    <div class="text-center mb-4">
+      <h1>Partie de Planning Poker</h1>
+      <h4>Code de la Partie : <span class="game-code">{{ gameCode }}</span></h4>
+    </div>
+  
+    <!-- Section des cartes -->
+    <div class="cards-container">
+      <h3 class="text-center">Sélectionnez une Carte :</h3>
+      <div class="cards">
+        <button
+          *ngFor="let card of cards"
+          class="card"
+          (click)="vote(card)"
+        >
+          {{ card }}
+        </button>
+      </div>
+    </div>
+  
+    <!-- Votes des joueurs -->
+    <div class="votes mt-5">
+      <h3 class="text-center">Votes des Joueurs :</h3>
+      <ul class="list-group">
+        <li *ngFor="let vote of votes" class="list-group-item">
+          {{ vote.player }} a voté : <strong>{{ vote.card }}</strong>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
