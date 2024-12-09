@@ -1,7 +1,7 @@
 package com.master1.planningpoker.mappers.gameMapper;
 
 import com.master1.planningpoker.dtos.request.gameRequests.createGameRequest;
-import com.master1.planningpoker.dtos.responses.GameResponse;
+import com.master1.planningpoker.dtos.responses.gameResponses.GameResponse;
 import com.master1.planningpoker.models.Game;
 import com.master1.planningpoker.models.Player;
 import com.master1.planningpoker.models.Rule;
@@ -34,6 +34,7 @@ public class GameMapper {
                 .id(game.getId())
                 .code(game.getCode())
                 .maxPlayers(game.getMaxPlayers())
+                .players(game.getPlayers())
                 .ruleId(game.getRule().getId())
                 .backlog(game.getBacklog())
                 .build();

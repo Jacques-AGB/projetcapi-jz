@@ -3,13 +3,14 @@ package com.master1.planningpoker.service.Player;
 
 import com.master1.planningpoker.dtos.request.playerRequests.CreatePlayerRequest;
 import com.master1.planningpoker.dtos.request.playerRequests.JoinGameRequest;
-import com.master1.planningpoker.dtos.responses.PlayerResponse;
+import com.master1.planningpoker.dtos.responses.playerResponses.PlayerResponse;
 import com.master1.planningpoker.mappers.playerMapper.PlayerMapper;
 import com.master1.planningpoker.models.Game;
 import com.master1.planningpoker.models.Player;
 import com.master1.planningpoker.repositories.GameRepository;
 import com.master1.planningpoker.repositories.PlayerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +19,16 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PlayerService implements IPlayerService {
-
+    @Autowired
     public final GameRepository gameRepository;
+    @Autowired
     public final PlayerRepository playerRepository;
+    @Autowired
     public final PlayerMapper playerMapper;
 
     @Override
     public String joinGame(JoinGameRequest request) {
+
         if (request.getPseudo() == null || request.getPseudo().isEmpty()) {
             throw new IllegalArgumentException("Pseudo cannot be null or empty");
         }
@@ -35,6 +39,10 @@ public class PlayerService implements IPlayerService {
         Game game = gameRepository.findByCode(request.getCode())
                 .orElseThrow(() -> new IllegalArgumentException("Game not found for code: " + request.getCode()));
 
+        int numPlayer =  game.getPlayers().size();
+        if (numPlayer == game.getMaxPlayers()){
+            throw new RuntimeException("The limit of player is reached");
+        }
         boolean playerExist = game.getPlayers().stream()
                 .anyMatch(player -> player.getPseudo().equals(request.getPseudo()));
 
@@ -84,9 +92,6 @@ public class PlayerService implements IPlayerService {
 
     @Override
     public String removePlayer(Long id) {
-        playerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Player not found with id: " + id));
-
         playerRepository.deleteById(id);
         return "Player : " + id + " has been deleted successfully";
     }

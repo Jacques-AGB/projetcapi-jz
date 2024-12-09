@@ -1,4 +1,4 @@
-package com.master1.planningpoker.dtos.request;
+package com.master1.planningpoker.dtos.request.voteRequests;
 
 
 import lombok.AllArgsConstructor;

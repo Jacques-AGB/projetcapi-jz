@@ -9,6 +9,7 @@ import com.master1.planningpoker.models.Game;
 import com.master1.planningpoker.repositories.AssignmentRepository;
 import com.master1.planningpoker.repositories.GameRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -21,9 +22,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AssignmentService implements IAssignmentService{
-
+    @Autowired
     private final AssignmentRepository assignmentRepository;
+    @Autowired
     private final AssignmentMapper assignmentMapper;
+    @Autowired
     private final GameRepository gameRepository;
 
     @Override
@@ -70,18 +73,15 @@ public class AssignmentService implements IAssignmentService{
         if (!gameExists) {
             throw new IllegalArgumentException("Game not found for the given ID: " + gameId);
         }
-        return assignmentRepository.findByGameId(gameId);
+        return  assignmentRepository.findAllByGameId(gameId)
+                .stream().map(assignmentMapper::toResponse).collect(Collectors.toList());
+
     }
 
 
 
     @Override
     public String removeAssignment(Long assignmentId) {
-        // Check if the assignment exist
-        boolean assignmentExist = assignmentRepository.existsById(assignmentId);
-        if (!assignmentExist) {
-            throw new IllegalArgumentException("Assignment not found for the given ID: " + assignmentId);
-        }
         assignmentRepository.deleteById(assignmentId);
         return "Assignment with id " + assignmentId + "removed successfully";
     }
@@ -94,7 +94,7 @@ public class AssignmentService implements IAssignmentService{
             throw new IllegalArgumentException("Game not found for the given ID: " + gameId);
         }
         // get a specific game backlog
-        List<AssignmentResponse> backlog = assignmentRepository.findByGameId(gameId);
+        List<Assignment> backlog = assignmentRepository.findAllByGameId(gameId);
         // build and save backlog in a json file
         Path downloadDir = Paths.get(System.getProperty("user.home"), "Downloads", "backlog");
         File backlogDir = downloadDir.toFile();

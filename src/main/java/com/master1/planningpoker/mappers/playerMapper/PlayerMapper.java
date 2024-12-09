@@ -2,7 +2,7 @@ package com.master1.planningpoker.mappers.playerMapper;
 
 
 import com.master1.planningpoker.dtos.request.playerRequests.CreatePlayerRequest;
-import com.master1.planningpoker.dtos.responses.PlayerResponse;
+import com.master1.planningpoker.dtos.responses.playerResponses.PlayerResponse;
 import com.master1.planningpoker.models.Player;
 import com.master1.planningpoker.repositories.GameRepository;
 import org.springframework.stereotype.Component;

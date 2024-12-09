@@ -2,7 +2,7 @@ package com.master1.planningpoker.controllers;
 
 import com.master1.planningpoker.dtos.request.playerRequests.CreatePlayerRequest;
 import com.master1.planningpoker.dtos.request.playerRequests.JoinGameRequest;
-import com.master1.planningpoker.dtos.responses.PlayerResponse;
+import com.master1.planningpoker.dtos.responses.playerResponses.PlayerResponse;
 import com.master1.planningpoker.service.Player.PlayerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class PlayerController {
     public final PlayerService playerService;
 
     @PostMapping("/join")
-    public ResponseEntity<String> addPlayer(@RequestBody @Valid JoinGameRequest request) {
+    public ResponseEntity<String> joinGame(@RequestBody @Valid JoinGameRequest request) {
          String response = playerService.joinGame(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -37,7 +37,7 @@ public class PlayerController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{pseudo}")
     public ResponseEntity<PlayerResponse> getPlayer(@PathVariable String pseudo) {
         PlayerResponse response = playerService.getPlayer(pseudo);
         return ResponseEntity.status(HttpStatus.OK).body(response);

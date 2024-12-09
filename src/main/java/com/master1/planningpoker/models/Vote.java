@@ -1,5 +1,6 @@
 package com.master1.planningpoker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class Vote {
     private Player player;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "assignment_id", nullable = false)
     private Assignment assignment;
 }

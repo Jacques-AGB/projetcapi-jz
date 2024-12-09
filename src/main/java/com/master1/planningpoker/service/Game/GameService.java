@@ -2,14 +2,14 @@ package com.master1.planningpoker.service.Game;
 
 
 import com.master1.planningpoker.dtos.request.gameRequests.createGameRequest;
-import com.master1.planningpoker.dtos.responses.GameResponse;
+import com.master1.planningpoker.dtos.responses.gameResponses.GameResponse;
 import com.master1.planningpoker.mappers.gameMapper.GameMapper;
-import com.master1.planningpoker.models.Assignment;
 import com.master1.planningpoker.models.Game;
 import com.master1.planningpoker.models.Rule;
 import com.master1.planningpoker.repositories.GameRepository;
 import com.master1.planningpoker.repositories.RuleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +19,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GameService implements IGameService{
-
+    @Autowired
     private final RuleRepository ruleRepository;
+    @Autowired
     private final GameRepository gameRepository;
+    @Autowired
     private final GameMapper gameMapper;
 
     @Override
@@ -74,11 +76,6 @@ public class GameService implements IGameService{
 
     @Override
     public String deleteGame(Long id) {
-
-        boolean exist = gameRepository.existsById(id);
-        if (!exist) {
-            throw new IllegalArgumentException("Game : " + id + " doesn't exists.");
-        }
         gameRepository.deleteById(id);
         return "Game with id : " + id + " deleted successfully";
     }

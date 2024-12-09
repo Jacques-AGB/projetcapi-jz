@@ -1,7 +1,7 @@
 package com.master1.planningpoker.service.Game;
 
 import com.master1.planningpoker.dtos.request.gameRequests.createGameRequest;
-import com.master1.planningpoker.dtos.responses.GameResponse;
+import com.master1.planningpoker.dtos.responses.gameResponses.GameResponse;
 
 import java.util.List;
 

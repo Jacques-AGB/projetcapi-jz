@@ -1,4 +1,4 @@
-package com.master1.planningpoker.dtos.responses;
+package com.master1.planningpoker.dtos.responses.playerResponses;
 
 
 import com.master1.planningpoker.models.Player;
@@ -15,6 +15,5 @@ public class PlayerResponse {
     private Long Id;
     private String pseudo;
     private boolean isAdmin;
-    private Player player;
 }
 

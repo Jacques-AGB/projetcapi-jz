@@ -1,7 +1,9 @@
 package com.master1.planningpoker.service.Vote;
 
 
-import com.master1.planningpoker.dtos.request.VoteRequest;
+import com.master1.planningpoker.dtos.request.voteRequests.VoteRequest;
+import com.master1.planningpoker.dtos.responses.voteResponses.VoteResponse;
+import com.master1.planningpoker.mappers.voteMapper.VoteMapper;
 import com.master1.planningpoker.models.Assignment;
 import com.master1.planningpoker.models.Player;
 import com.master1.planningpoker.models.Vote;
@@ -9,17 +11,24 @@ import com.master1.planningpoker.repositories.AssignmentRepository;
 import com.master1.planningpoker.repositories.PlayerRepository;
 import com.master1.planningpoker.repositories.VoteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class VoteService implements IVoteService{
+    @Autowired
     private final AssignmentRepository assignmentRepository;
+    @Autowired
     private final PlayerRepository playerRepository;
+    @Autowired
     private final VoteRepository voteRepository;
+    @Autowired
+    private final VoteMapper voteMapper;
 
 
     @Override
@@ -38,21 +47,34 @@ public class VoteService implements IVoteService{
         vote.setValue(request.getValue());
 
         voteRepository.save(vote);
-        return "Vote fait";
+        return "Player " + request.getPlayerId() + " has voted";
     }
 
     @Override
-    public List<Vote> getVotesForAssignment(Long assignmentId) {
-        return List.of();
+    public List<VoteResponse> getVotes() {
+         return voteRepository.findAll().
+                 stream().map(voteMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
-    public int calculateResult(Long assignmentId, String ruleType) {
-        return 0;
+    public VoteResponse getVote(Long id) {
+        Vote vote = voteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Vote with id : "+ id +" doesn't exists."));
+        return voteMapper.toResponse(vote);
     }
 
     @Override
-    public void resetVotes(Long assignmentId) {
-
+    public List<VoteResponse> getVotesForAssignment(Long assignmentId) {
+        List<Vote> vote = voteRepository.findByAssignmentId(assignmentId);
+        return vote.stream()
+                .map(voteMapper::toResponse).collect(Collectors.toList());
     }
+
+    @Override
+    public String deleteVote(Long id) {
+        voteRepository.deleteById(id);
+        return "Vote : "+ id+" deleted successfully";
+    }
+
+
 }

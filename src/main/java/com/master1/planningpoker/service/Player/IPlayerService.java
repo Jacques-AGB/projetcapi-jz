@@ -2,7 +2,7 @@ package com.master1.planningpoker.service.Player;
 
 import com.master1.planningpoker.dtos.request.playerRequests.CreatePlayerRequest;
 import com.master1.planningpoker.dtos.request.playerRequests.JoinGameRequest;
-import com.master1.planningpoker.dtos.responses.PlayerResponse;
+import com.master1.planningpoker.dtos.responses.playerResponses.PlayerResponse;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.master1.planningpoker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class Player {
 
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
+    @JsonIgnore
     private Game game;
 }
 

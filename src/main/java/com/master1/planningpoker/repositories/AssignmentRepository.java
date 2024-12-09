@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     boolean existsByLibelle(String libelle);
-    List<AssignmentResponse> findByGameId(Long gameId);
+    List<Assignment> findAllByGameId(Long gameId);
 
 }
