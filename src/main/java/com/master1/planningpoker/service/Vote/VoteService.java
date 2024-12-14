@@ -57,6 +57,12 @@ public class VoteService implements IVoteService{
     }
 
     @Override
+    public List<VoteResponse> getVotesByGameCode(String code) {
+        return voteRepository.findVotesByGameCode(code).
+                stream().map(voteMapper::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
     public VoteResponse getVote(Long id) {
         Vote vote = voteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vote with id : "+ id +" doesn't exists."));

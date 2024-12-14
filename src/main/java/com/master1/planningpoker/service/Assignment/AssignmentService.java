@@ -126,6 +126,13 @@ public class AssignmentService implements IAssignmentService{
                 .map(assignmentMapper::toResponse)
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<AssignmentResponse> getAssignmentsByGameCode(String gameCode) {
+        List<Assignment> assignments = assignmentRepository.findAssignmentsByGameCode(gameCode);
+        return assignments.stream()
+                .map(assignmentMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public void loadBacklogFromJson(Long gameId, String filePath) {

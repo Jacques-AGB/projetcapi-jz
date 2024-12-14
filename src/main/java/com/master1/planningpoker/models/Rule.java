@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 public class Rule {
@@ -14,7 +16,5 @@ public class Rule {
     @Column(nullable = false)
     private String name;
 
-    @OneToOne(mappedBy = "rule", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private Game game;
+
 }

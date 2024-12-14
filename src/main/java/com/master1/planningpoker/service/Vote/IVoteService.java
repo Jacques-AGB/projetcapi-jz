@@ -9,6 +9,7 @@ import java.util.List;
 public interface IVoteService {
     public String submitVote(VoteRequest request);
     public List<VoteResponse> getVotes();
+    public List<VoteResponse> getVotesByGameCode(String code);
     public VoteResponse getVote(Long id);
     public List<VoteResponse> getVotesForAssignment(Long assignmentId);
     public String deleteVote(Long assignmentId);

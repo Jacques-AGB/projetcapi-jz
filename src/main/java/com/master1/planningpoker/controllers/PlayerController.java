@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/players")
@@ -20,9 +22,18 @@ public class PlayerController {
     public final PlayerService playerService;
 
     @PostMapping("/join")
-    public ResponseEntity<String> joinGame(@RequestBody @Valid JoinGameRequest request) {
-         String response = playerService.joinGame(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<Map<String, Object>> joinGame(@RequestBody @Valid JoinGameRequest request) {
+        // Appel au service pour ajouter le joueur
+        String response = playerService.joinGame(request);
+
+        // Création de la réponse contenant le message et le code de la partie
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", "success");
+        responseMap.put("message", response);
+        responseMap.put("gameCode", request.getCode());  // Ajout du code de la partie dans la réponse
+
+        // Retourner une réponse HTTP avec le corps contenant le message et le code
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
     }
 
     @PostMapping("/createEdit")

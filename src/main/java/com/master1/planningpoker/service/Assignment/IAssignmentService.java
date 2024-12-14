@@ -2,6 +2,7 @@ package com.master1.planningpoker.service.Assignment;
 
 import com.master1.planningpoker.dtos.request.assignmentRequest.AddAssignmentRequest;
 import com.master1.planningpoker.dtos.responses.assignmentResponses.AssignmentResponse;
+import com.master1.planningpoker.models.Assignment;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public interface IAssignmentService {
     AssignmentResponse getAssignment(Long id);
 
     List<AssignmentResponse> getAssignments();
+    List<AssignmentResponse> getAssignmentsByGameCode(String gameCode);
 
     List<AssignmentResponse> getBacklog(Long gameId);
 

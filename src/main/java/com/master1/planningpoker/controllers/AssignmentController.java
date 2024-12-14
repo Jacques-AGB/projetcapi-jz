@@ -38,6 +38,11 @@ public class AssignmentController {
         return ResponseEntity.ok(responses);
     }
 
+    @GetMapping("/game/{gameCode}")
+    public ResponseEntity<List<AssignmentResponse>> getAssignmentsByGameCode(@PathVariable String gameCode) {
+        List<AssignmentResponse> assignments = assignmentService.getAssignmentsByGameCode(gameCode);
+        return ResponseEntity.ok(assignments);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<AssignmentResponse> getAssignment(@PathVariable Long id) {
         AssignmentResponse response = assignmentService.getAssignment(id);
