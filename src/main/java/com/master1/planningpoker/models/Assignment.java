@@ -6,6 +6,15 @@ import lombok.Data;
 
 import java.util.List;
 
+
+/**
+ * @class Assignment
+ * @brief Représente une tâche ou un élément de backlog dans un jeu de Planning Poker.
+ *
+ * La classe `Assignment` est utilisée pour modéliser une tâche qui fait partie d'un jeu,
+ * avec un libellé, une description, une difficulté et une association avec un jeu spécifique.
+ * Elle est également liée à plusieurs votes effectués par les joueurs pendant l'estimation de la tâche.
+ */
 @Entity
 @Data
 public class Assignment {

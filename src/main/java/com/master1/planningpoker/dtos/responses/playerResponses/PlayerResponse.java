@@ -7,6 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @class PlayerResponse
+ * @brief Représente la réponse détaillée d'un joueur dans le jeu.
+ *
+ * Cette classe encapsule les informations principales d'un joueur, telles que son identifiant,
+ * son pseudonyme et son rôle d'administrateur dans le jeu.
+ */
 @Data
 @Builder
 @AllArgsConstructor

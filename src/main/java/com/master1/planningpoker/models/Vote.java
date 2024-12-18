@@ -7,6 +7,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+
+
+/**
+ * @class Vote
+ * @brief Représente un vote effectué par un joueur pour une tâche (assignment) dans une partie de Planning Poker.
+ *
+ * La classe `Vote` représente un vote effectué par un joueur pour une tâche (assignment) dans un jeu de Planning Poker.
+ * Chaque vote contient une valeur (par exemple, une estimation de la tâche), ainsi que des références à l'entité `Player` (le joueur qui a voté) et à l'entité `Assignment` (la tâche pour laquelle le vote a été effectué).
+ */
 @Entity
 @Data
 @Builder

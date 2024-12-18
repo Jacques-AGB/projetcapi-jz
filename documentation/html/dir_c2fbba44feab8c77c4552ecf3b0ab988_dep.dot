@@ -1,0 +1,12 @@
+digraph "src/main/java/com/master1/planningpoker/dtos/responses/voteResponses"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  compound=true
+  subgraph clusterdir_ed13c7bf6cb615b37cbc8e9d5d31fbb6 {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", label="responses", fontname=Helvetica,fontsize=10 style="filled,dashed", URL="dir_ed13c7bf6cb615b37cbc8e9d5d31fbb6.html",tooltip=""]
+  dir_c2fbba44feab8c77c4552ecf3b0ab988 [label="voteResponses", fillcolor="#edf0f7", color="grey25", style="filled,bold", URL="dir_c2fbba44feab8c77c4552ecf3b0ab988.html",tooltip=""];
+  }
+}

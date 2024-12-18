@@ -1,0 +1,11 @@
+digraph "com.master1.planningpoker.service.Vote.VoteService.deleteVote"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="com.master1.planningpoker.service.\lVote.VoteService.deleteVote",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="com.master1.planningpoker.controllers.\lVoteController.deleteVote",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcom_1_1master1_1_1planningpoker_1_1controllers_1_1_vote_controller.html#a14127217234b73d3d3e0d28d9f158b35",tooltip="Supprime un vote spécifique en fonction de son ID."];
+}

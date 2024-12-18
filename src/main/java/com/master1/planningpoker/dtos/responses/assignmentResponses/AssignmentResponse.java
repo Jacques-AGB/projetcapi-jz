@@ -10,6 +10,14 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+
+/**
+ * @class AssignmentResponse
+ * @brief Représente la réponse d'une tâche (assignment) dans le système.
+ *
+ * Cette classe est utilisée pour encapsuler les informations détaillées d'une tâche, y compris son
+ * libellé, sa description, sa difficulté et les votes associés à cette tâche.
+ */
 @Data
 @Builder
 @AllArgsConstructor

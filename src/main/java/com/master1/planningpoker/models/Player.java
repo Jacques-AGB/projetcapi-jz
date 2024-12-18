@@ -6,6 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * @class Player
+ * @brief Représente un joueur dans une partie de Planning Poker.
+ *
+ * La classe `Player` modélise un joueur qui participe à une partie de Planning Poker. Elle contient des informations
+ * sur le pseudonyme du joueur, son rôle (administrateur ou non), ainsi que la partie à laquelle il est associé.
+ * Un joueur peut participer à une ou plusieurs parties et être l'administrateur d'une partie.
+ */
 @Entity
 @Data
 @AllArgsConstructor
@@ -22,7 +31,7 @@ public class Player {
     private boolean isAdmin;
 
     @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
+    @JoinColumn(name = "game_id", nullable = true)
     @JsonIgnore
     private Game game;
 }

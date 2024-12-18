@@ -1,0 +1,11 @@
+digraph "com.master1.planningpoker.controllers.RuleController.removeRule"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="com.master1.planningpoker.controllers.\lRuleController.removeRule",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Supprime une règle spécifique en fonction de son ID. Cette méthode permet de supprimer une règle du s..."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="com.master1.planningpoker.service.\lRule.RuleService.deleteRule",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcom_1_1master1_1_1planningpoker_1_1service_1_1_rule_1_1_rule_service.html#ab39245a37a5c0ef0eccdfff0b9aa59be",tooltip=" "];
+}

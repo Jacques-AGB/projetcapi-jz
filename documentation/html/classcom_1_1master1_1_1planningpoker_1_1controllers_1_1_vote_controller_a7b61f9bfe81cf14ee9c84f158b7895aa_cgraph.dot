@@ -1,0 +1,11 @@
+digraph "com.master1.planningpoker.controllers.VoteController.submitVote"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="com.master1.planningpoker.controllers.\lVoteController.submitVote",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Soumet un vote pour un joueur sur une tâche spécifique."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="com.master1.planningpoker.service.\lVote.VoteService.submitVote",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classcom_1_1master1_1_1planningpoker_1_1service_1_1_vote_1_1_vote_service.html#ac77f6dc413ce4b1e97abb4b13ee10d1d",tooltip=" "];
+}

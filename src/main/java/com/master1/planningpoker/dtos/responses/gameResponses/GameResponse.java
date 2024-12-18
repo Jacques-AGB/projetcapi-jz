@@ -10,6 +10,14 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+
+/**
+ * @class GameResponse
+ * @brief Représente la réponse détaillée d'un jeu.
+ *
+ * Cette classe encapsule les informations principales d'un jeu, telles que son identifiant, son code,
+ * les joueurs associés et les tâches (assignments) dans le backlog du jeu.
+ */
 @Data
 @Builder
 @AllArgsConstructor

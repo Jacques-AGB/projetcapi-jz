@@ -6,6 +6,13 @@ import org.springframework.scheduling.config.Task;
 
 import java.util.List;
 
+/**
+ * @class Game
+ * @brief Représente une partie de Planning Poker, un jeu où des joueurs estiment la difficulté des tâches.
+ *
+ * La classe `Game` est utilisée pour modéliser une partie de Planning Poker. Elle contient des informations sur le code du jeu,
+ * le nombre maximum de joueurs, la liste des joueurs participants, un backlog de tâches à estimer, et les règles du jeu.
+ */
 @Entity
 @Data
 public class Game {
