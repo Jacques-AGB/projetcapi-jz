@@ -58,9 +58,12 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+<<<<<<< HEAD
           "options": {
           "proxyConfig": "proxy.conf.json"
           },
+=======
+>>>>>>> be2da18f36649e90e1dddd50d4d765dd2d7d77c9
           "configurations": {
             "production": {
               "browserTarget": "poker:build:production"

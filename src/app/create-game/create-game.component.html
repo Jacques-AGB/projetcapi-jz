@@ -1,6 +1,7 @@
 <div class="container">
   <div class="row full-height justify-content-center">
     <div class="col-12 text-center align-self-center py-5">
+
       <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
       <label for="reg-log"></label>
       <div class="card-3d-wrap mx-auto">
@@ -10,6 +11,7 @@
             <div class="center-wrap">
               <h4>Créer un Jeu</h4>
               <form (ngSubmit)="createGame()" #createForm="ngForm">
+
                 <!-- Champ Pseudo -->
                 <div class="form-group">
                   <input
@@ -23,16 +25,20 @@
                 </div>
                 
                 <!-- Champ Nombre de joueurs maximum -->
+
                 <div class="form-group">
                   <input
                     type="number"
                     class="form-style"
                     placeholder="Nombre de joueurs maximum"
+
                     [(ngModel)]="maxPlayers"  
+
                     name="maxPlayers"
                     required
                   />
                 </div>
+
 
                 <!-- Bouton pour charger un fichier Backlog -->
                 <div class="form-group">
@@ -78,6 +84,7 @@
                   <input type="text" class="form-style" [(ngModel)]="gameCodeToJoin" name="gameCodeToJoin" required />
                 </div>
                 <button type="submit" class="form-button">Rejoindre</button>
+
               </form>
             </div>
           </div>

@@ -5,7 +5,9 @@ import { PlanningGameComponent } from './planning-game/planning-game.component';
 
 const routes: Routes = [
   { path: '', component: CreateGameComponent }, // Page d'accueil
+
   { path: 'planning-game/:code', component: PlanningGameComponent }, // Route dynamique
+
 ];
 
 @NgModule({

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../game.service';
 
+
 @Component({
   selector: 'app-planning-game',
   templateUrl: './planning-game.component.html',
@@ -11,6 +12,7 @@ export class PlanningGameComponent implements OnInit {
   gameCode: string | null = null;
   maxPlayers: number = 5; // Nombre maximum de joueurs (par défaut)
   cards: string[] = ['1', '2', '3', '5', '8', '13', '21', '?', '☕'];
+
   selectedCard:string = '';  // Carte sélectionnée par le joueur
   votes: { player: string; card: string }[] = [];
   pseudo: string | null = '';  // Pseudo de l'utilisateur
