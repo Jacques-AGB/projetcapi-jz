@@ -23,4 +23,43 @@ public class createGameRequest {
         private Long ruleId;
         private List<AssignmentRequest> backlog;
 
+        public Long getId() {
+                return id;
+        }
+
+        public void setId(Long id) {
+                this.id = id;
+        }
+
+        public String getCode() {
+                return code;
+        }
+
+        public void setCode(String code) {
+                this.code = code;
+        }
+
+        public int getMaxPlayers() {
+                return maxPlayers;
+        }
+
+        public void setMaxPlayers(int maxPlayers) {
+                this.maxPlayers = maxPlayers;
+        }
+
+        public Long getRuleId() {
+                return ruleId;
+        }
+
+        public void setRuleId(Long ruleId) {
+                this.ruleId = ruleId;
+        }
+
+        public List<AssignmentRequest> getBacklog() {
+                return backlog;
+        }
+
+        public void setBacklog(List<AssignmentRequest> backlog) {
+                this.backlog = backlog;
+        }
 }
