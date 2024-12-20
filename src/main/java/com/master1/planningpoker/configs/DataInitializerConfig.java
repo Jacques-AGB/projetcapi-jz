@@ -21,7 +21,7 @@ public class DataInitializerConfig {
 
     /**
      * Méthode qui s'exécute automatiquement au démarrage de l'application.
-     * Elle permet d'insérer des données initiales (rules et player).
+     * Elle permet d'insérer des données initiales (rules et player)
      */
     @Bean
     CommandLineRunner initData() {
