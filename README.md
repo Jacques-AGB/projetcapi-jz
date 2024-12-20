@@ -3,9 +3,11 @@ Projet CAPI - Planning Poker
 📝 Introduction
 Le projet CAPI est une application de Planning Poker, développée pour simplifier les estimations de complexité des tâches dans un backlog selon les méthodologies agiles. L'outil permet de :
 
-Voter sur la complexité des tâches.
-Enregistrer les résultats pour analyse ou reprise.
-Faciliter la collaboration entre les membres d'une équipe.
+- Voter sur la complexité des tâches.
+
+- Enregistrer les résultats pour analyse ou reprise.
+
+- Faciliter la collaboration entre les membres d'une équipe.
 
 🚀 Technologies Utilisées
 
