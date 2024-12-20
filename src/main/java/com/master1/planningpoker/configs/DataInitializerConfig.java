@@ -28,7 +28,6 @@ public class DataInitializerConfig {
         return args -> {
             // Initialisation des Rules
             initializeDefaultRules();
-
             // Initialisation du joueur Admin
             initializeAdminPlayer();
         };
