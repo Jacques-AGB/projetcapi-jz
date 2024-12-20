@@ -33,7 +33,6 @@ public class DataInitializerConfig {
             initializeAdminPlayer();
         };
     }
-
     private void initializeDefaultRules() {
         String[] ruleNames = {"UNANIMITE", "MOYEN"};
 
