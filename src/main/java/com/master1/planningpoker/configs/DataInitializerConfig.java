@@ -19,6 +19,8 @@ public class DataInitializerConfig {
     @Autowired
     private IPlayerService playerService;
 
+
+    
     /**
      * Méthode qui s'exécute automatiquement au démarrage de l'application.
      * Elle permet d'insérer des données initiales (rules et player)
