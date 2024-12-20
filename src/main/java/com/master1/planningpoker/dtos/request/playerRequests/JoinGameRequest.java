@@ -20,6 +20,12 @@ public class JoinGameRequest {
     private String pseudo;
     private String code;
 
+    public JoinGameRequest(String pseudo, String code, boolean isAdmin) {
+        this.pseudo = pseudo;
+        this.code = code;
+        this.isAdmin = isAdmin;
+    }
+
     public boolean isAdmin() {
         return isAdmin;
     }

@@ -83,4 +83,13 @@ public class AssignmentResponse {
     public void setVotes(List<Vote> votes) {
         this.votes = votes;
     }
+
+    public AssignmentResponse(Long id, String libelle, String description, Integer difficulty, Game game, List<Vote> votes) {
+        this.id = id;
+        this.libelle = libelle;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.game = game;
+        this.votes = votes;
+    }
 }

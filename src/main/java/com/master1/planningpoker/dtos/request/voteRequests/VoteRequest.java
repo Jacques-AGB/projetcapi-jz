@@ -45,4 +45,10 @@ public class VoteRequest {
     }
 
     private int value;
+
+    public VoteRequest(Long playerId, Long assignmentId, int value) {
+        this.playerId = playerId;
+        this.assignmentId = assignmentId;
+        this.value = value;
+    }
 }

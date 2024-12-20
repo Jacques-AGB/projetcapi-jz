@@ -23,6 +23,12 @@ public class PlayerResponse {
     private String pseudo;
     private boolean isAdmin;
 
+    public PlayerResponse(Long id, String pseudo, boolean isAdmin) {
+        Id = id;
+        this.pseudo = pseudo;
+        this.isAdmin = isAdmin;
+    }
+
     public Long getId() {
         return Id;
     }

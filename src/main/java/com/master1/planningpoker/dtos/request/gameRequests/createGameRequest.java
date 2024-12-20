@@ -62,4 +62,12 @@ public class createGameRequest {
         public void setBacklog(List<AssignmentRequest> backlog) {
                 this.backlog = backlog;
         }
+
+        public createGameRequest(Long id, String code, int maxPlayers, Long ruleId, List<AssignmentRequest> backlog) {
+                this.id = id;
+                this.code = code;
+                this.maxPlayers = maxPlayers;
+                this.ruleId = ruleId;
+                this.backlog = backlog;
+        }
 }

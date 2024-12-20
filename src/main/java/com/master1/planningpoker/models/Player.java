@@ -26,6 +26,13 @@ public class Player {
 
     @Column(nullable = false)
     private String pseudo;
+    @Column(nullable = false)
+    private boolean isAdmin;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id", nullable = true)
+    @JsonIgnore
+    private Game game;
 
     public Long getId() {
         return id;
@@ -59,12 +66,11 @@ public class Player {
         this.game = game;
     }
 
-    @Column(nullable = false)
-    private boolean isAdmin;
-
-    @ManyToOne
-    @JoinColumn(name = "game_id", nullable = true)
-    @JsonIgnore
-    private Game game;
+    public Player(Long id, String pseudo, boolean isAdmin, Game game) {
+        this.id = id;
+        this.pseudo = pseudo;
+        this.isAdmin = isAdmin;
+        this.game = game;
+    }
 }
 

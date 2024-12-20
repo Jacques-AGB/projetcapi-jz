@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class RuleResponse {
+
     private Long id;
 
     private String name;
@@ -36,6 +37,11 @@ public class RuleResponse {
     }
 
     public void setName(String name) {
+        this.name = name;
+    }
+
+    public RuleResponse(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 }

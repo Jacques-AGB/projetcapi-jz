@@ -83,4 +83,13 @@ public class Game {
     @ManyToOne
     @JoinColumn(name = "rule_id", referencedColumnName = "id")
     private Rule rule;
+
+    public Game(Rule rule, List<Assignment> backlog, List<Player> players, int maxPlayers, String code, Long id) {
+        this.rule = rule;
+        this.backlog = backlog;
+        this.players = players;
+        this.maxPlayers = maxPlayers;
+        this.code = code;
+        this.id = id;
+    }
 }

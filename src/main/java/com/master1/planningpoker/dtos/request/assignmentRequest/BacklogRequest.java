@@ -19,4 +19,8 @@ public class BacklogRequest {
     public void setAssignments(List<AssignmentRequest> assignments) {
         this.assignments = assignments;
     }
+
+    public BacklogRequest(List<AssignmentRequest> assignments) {
+        this.assignments = assignments;
+    }
 }
