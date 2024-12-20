@@ -20,7 +20,7 @@ public interface IVoteService {
      * @throws IllegalArgumentException si les informations du vote sont invalides.
      */
     public String submitVote(VoteRequest request);
-
+    public String evaluateUnanimity(Assignment assignment);
     /**
      * Récupère tous les votes de l'application.
      *
@@ -63,5 +63,5 @@ public interface IVoteService {
 
     String evaluateAverage(Assignment assignment);
 
-    String evaluateUnanimity(Assignment assignment);
+
 }

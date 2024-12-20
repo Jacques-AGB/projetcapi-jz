@@ -42,130 +42,145 @@ public class VoteService implements IVoteService {
      * @return Un message confirmant la soumission du vote.
      * @throws IllegalArgumentException si l'assignation ou le joueur n'existent pas.
      */
+
     @Override
     public String submitVote(VoteRequest request) {
-        Optional<Assignment> assignment = assignmentRepository.findById(request.getAssignmentId());
-        if (assignment.isEmpty()) {
-            throw new IllegalArgumentException("An assignment doesn't exist.");
+        // Vérifier si l'assignation et le joueur existent
+        Optional<Assignment> assignmentOpt = assignmentRepository.findById(request.getAssignmentId());
+        if (assignmentOpt.isEmpty()) {
+            throw new IllegalArgumentException("The assignment doesn't exist.");
         }
 
-        Optional<Player> playerExists = playerRepository.findById(request.getPlayerId());
-        if (playerExists.isEmpty()) {
-            throw new IllegalArgumentException("A player doesn't exist.");
+        Optional<Player> playerOpt = playerRepository.findById(request.getPlayerId());
+        if (playerOpt.isEmpty()) {
+            throw new IllegalArgumentException("The player doesn't exist.");
         }
 
-        // Vérifier si le joueur a déjà voté pour cette assignation
-        boolean playerAlreadyVoted = voteRepository.existsByAssignmentIdAndPlayerId(assignment.get().getId(), request.getPlayerId());
+        Assignment assignment = assignmentOpt.get();
+        Player player = playerOpt.get();
+
+        // Vérifier si le joueur a déjà voté
+        boolean playerAlreadyVoted = voteRepository.existsByAssignmentIdAndPlayerId(assignment.getId(), request.getPlayerId());
         if (playerAlreadyVoted) {
             return "Player has already voted.";
         }
 
-        // Récupérer le nombre de joueurs et de votes pour cette assignation
-        List<Player> players = playerRepository.findByGameId(assignment.get().getGame().getId());
-        long totalVotes = voteRepository.countByAssignmentId(assignment.get().getId());
-
-        // Vérifier si le nombre de votes dépasse le nombre de joueurs
-        if (totalVotes >= players.size()) {
-            return "All players have already voted.";
-        }
-
-        // Créer un nouveau vote
+        // Enregistrer le vote
         Vote vote = new Vote();
-        vote.setAssignment(assignment.get());
-        vote.setPlayer(playerExists.get());
+        vote.setAssignment(assignment);
+        vote.setPlayer(player);
         vote.setValue(request.getValue());
-
-        // Sauvegarder le vote
         voteRepository.save(vote);
 
         // Vérifier si tous les joueurs ont voté
-        if (allPlayersVoted(assignment.get())) {
-            // Récupérer la règle du jeu associée à l'assignation
-            Game game = assignment.get().getGame();
-            Rule rule = game.getRule();
+        if (allPlayersVoted(assignment)) {
+            // Appliquer la règle associée
+            String ruleResult = applyRule(assignment);
 
-            // Appliquer la règle de vote selon la règle définie dans le jeu
-            if (rule.getName().equals("UNANIMITE")) {
-                // Appliquer l'unanimité et récupérer la valeur ou "0"
-                String voteValue = evaluateUnanimity(assignment.get());
-                if (!voteValue.equals("0")) {
-                    // Si l'unanimité est atteinte, mettre à jour la difficulté
-                    assignment.get().setDifficulty(Integer.parseInt(voteValue));
-                    assignmentRepository.save(assignment.get());
-                }
-                return voteValue;
-            } else if (rule.getName().equals("MOYEN")) {
-                // Appliquer la moyenne et récupérer la valeur
-                String averageValue = evaluateAverage(assignment.get());
-                if (!averageValue.equals("0")) {
-                    // Si une moyenne est calculée, mettre à jour la difficulté
-                    assignment.get().setDifficulty(Integer.parseInt(averageValue));
-                    assignmentRepository.save(assignment.get());
-                }
-                return averageValue;
-            } else {
-                throw new IllegalArgumentException("Invalid game rule.");
+            if (ruleResult.equals("RULE_NOT_RESPECTED")) {
+                // Réinitialiser les votes si la règle n'est pas respectée
+                voteRepository.deleteAll(voteRepository.findByAssignmentId(assignment.getId()));
+                return "The rule is not respected. All players must revote.";
             }
-        } else {
-            return "Waiting for other players to vote.";
+
+            // Mettre à jour l'assignation avec la difficulté finale
+            assignment.setDifficulty(Integer.parseInt(ruleResult));
+            assignmentRepository.save(assignment);
+
+            return "The rule is respected. Final value: " + ruleResult;
         }
+
+        return "Waiting for other players to vote.";
     }
 
-
-    public boolean allPlayersVoted(Assignment assignment) {
+    /**
+     * Vérifie si tous les joueurs d'un jeu ont voté pour une assignation.
+     *
+     * @param assignment L'assignation pour laquelle vérifier les votes.
+     * @return Vrai si tous les joueurs ont voté, faux sinon.
+     */
+    private boolean allPlayersVoted(Assignment assignment) {
+        // Récupérer la liste des joueurs associés au jeu
         List<Player> players = playerRepository.findByGameId(assignment.getGame().getId());
+
+        // Compter le nombre de votes pour l'assignation
         long totalVotes = voteRepository.countByAssignmentId(assignment.getId());
 
-        // Vérifie si tous les joueurs ont voté
+        // Vérifier si tous les joueurs ont voté
         return players.size() == totalVotes;
     }
 
     /**
-     * Vérifie si tous les votes sont unanimes pour une assignation.
+     * Applique la règle du jeu à une assignation.
+     * Si la règle n'est pas respectée, retourne "RULE_NOT_RESPECTED".
      *
-     * @param assignment L'assignation à évaluer.
-     * @return Un message indiquant si le vote est unanime ou non.
+     * @param assignment L'assignation pour laquelle appliquer la règle.
+     * @return La valeur finale si la règle est respectée, ou "RULE_NOT_RESPECTED".
      */
-    @Override
-    public String evaluateUnanimity(Assignment assignment) {
+    private String applyRule(Assignment assignment) {
+        Game game = assignment.getGame();
+        Rule rule = game.getRule();
+
+        // Récupérer les votes associés à l'assignation
         List<Vote> votes = voteRepository.findByAssignmentId(assignment.getId());
 
-        // Vérifie si tous les votes sont identiques
-        boolean isUnanimous = votes.stream().allMatch(vote -> vote.getValue() == votes.getFirst().getValue());
-
-        if (isUnanimous) {
-            // Si l'unanimité est atteinte, retourne la valeur du vote en String
-            return String.valueOf(votes.getFirst().getValue());
-        } else {
-            // Sinon, retourne "0"
-            return "0";
+        if (rule.getName().equalsIgnoreCase("UNANIMITE")) {
+            // Vérifier si tous les votes ont la même valeur
+            boolean unanimous = votes.stream()
+                    .map(Vote::getValue)
+                    .distinct()
+                    .count() == 1;
+            return unanimous ? String.valueOf(votes.get(0).getValue()) : "RULE_NOT_RESPECTED";
         }
+
+        if (rule.getName().equalsIgnoreCase("MOYEN")) {
+            // Calculer la moyenne des votes
+            double average = votes.stream()
+                    .mapToInt(Vote::getValue)
+                    .average()
+                    .orElse(0);
+
+            // Exemple : Valider la moyenne selon une logique spécifique (optionnel)
+            return (average > 0) ? String.valueOf((int) Math.round(average)) : "RULE_NOT_RESPECTED";
+        }
+
+        throw new IllegalArgumentException("Invalid game rule.");
     }
 
-    /**
-     * Calcule la moyenne des votes pour une assignation.
-     *
-     * @param assignment L'assignation à évaluer.
-     * @return Un message avec la moyenne des votes.
-     */
+    @Override
+    public String evaluateUnanimity(Assignment assignment) {
+        // Récupérer les votes pour l'assignation
+        List<Vote> votes = voteRepository.findByAssignmentId(assignment.getId());
+
+        // Vérifier si tous les votes ont la même valeur
+        boolean unanimous = votes.stream()
+                .map(Vote::getValue)
+                .distinct()
+                .count() == 1;
+
+        if (unanimous) {
+            return String.valueOf(votes.get(0).getValue());
+        }
+
+        return "RULE_NOT_RESPECTED";
+    }
     @Override
     public String evaluateAverage(Assignment assignment) {
         List<Vote> votes = voteRepository.findByAssignmentId(assignment.getId());
 
         if (votes.isEmpty()) {
-            return "No votes submitted yet.";
+            return "0"; // Aucun vote soumis
         }
 
         // Calculer la moyenne des votes
         double average = votes.stream()
                 .mapToInt(Vote::getValue)
                 .average()
-                .orElseThrow(() -> new IllegalArgumentException("Cannot calculate average, no votes available"));
+                .orElse(0);
 
-        return "The average vote value is: " + average;
+        // Retourner la moyenne arrondie sous forme de String
+        return String.valueOf((int) Math.round(average));
     }
-
-
 /**
      * Récupère tous les votes enregistrés dans le système.
      *
