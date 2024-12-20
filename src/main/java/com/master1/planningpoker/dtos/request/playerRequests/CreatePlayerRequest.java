@@ -23,6 +23,13 @@ public class CreatePlayerRequest {
     private String code;
     private boolean isAdmin;
 
+    public CreatePlayerRequest(Long id, String pseudo, String code, boolean isAdmin) {
+        this.id = id;
+        this.pseudo = pseudo;
+        this.code = code;
+        this.isAdmin = isAdmin;
+    }
+
     public Long getId() {
         return id;
     }

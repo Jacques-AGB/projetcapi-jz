@@ -37,4 +37,8 @@ public class AddRuleRequest {
 
     private String name;
 
+    public AddRuleRequest(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

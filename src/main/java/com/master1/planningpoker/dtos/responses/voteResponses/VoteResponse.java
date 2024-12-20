@@ -60,4 +60,11 @@ public class VoteResponse {
     public void setAssignment(Assignment assignment) {
         this.assignment = assignment;
     }
+
+    public VoteResponse(Assignment assignment, Player player, int value, Long id) {
+        this.assignment = assignment;
+        this.player = player;
+        this.value = value;
+        this.id = id;
+    }
 }

@@ -39,4 +39,9 @@ public class Rule {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Rule(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

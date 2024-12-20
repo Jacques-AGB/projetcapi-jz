@@ -30,6 +30,15 @@ public class Vote {
     @Column(nullable = false)
     private int value;
 
+    @ManyToOne
+    @JoinColumn(name = "player_id", nullable = false)
+    private Player player;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "assignment_id", nullable = false)
+    private Assignment assignment;
+
     public Long getId() {
         return id;
     }
@@ -62,12 +71,10 @@ public class Vote {
         this.assignment = assignment;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "player_id", nullable = false)
-    private Player player;
-
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "assignment_id", nullable = false)
-    private Assignment assignment;
+    public Vote(Long id, int value, Player player, Assignment assignment) {
+        this.id = id;
+        this.value = value;
+        this.player = player;
+        this.assignment = assignment;
+    }
 }

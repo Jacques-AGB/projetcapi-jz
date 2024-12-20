@@ -31,6 +31,15 @@ public class GameResponse {
     private List<Player> players; // Pseudos des joueurs
     private List<Assignment> backlog;
 
+    public GameResponse(Long id, String code, int maxPlayers, Long ruleId, List<Player> players, List<Assignment> backlog) {
+        this.id = id;
+        this.code = code;
+        this.maxPlayers = maxPlayers;
+        this.ruleId = ruleId;
+        this.players = players;
+        this.backlog = backlog;
+    }
+
     public Long getId() {
         return id;
     }

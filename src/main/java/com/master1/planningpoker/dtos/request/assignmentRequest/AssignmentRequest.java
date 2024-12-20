@@ -48,4 +48,11 @@ public class AssignmentRequest {
     public void setGameId(Long gameId) {
         this.gameId = gameId;
     }
+
+    public AssignmentRequest(String libelle, String description, Integer difficulty, Long gameId) {
+        this.libelle = libelle;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.gameId = gameId;
+    }
 }

@@ -85,4 +85,13 @@ public class Assignment {
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> votes;
+
+    public Assignment(Long id, String libelle, String description, Integer difficulty, Game game, List<Vote> votes) {
+        this.id = id;
+        this.libelle = libelle;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.game = game;
+        this.votes = votes;
+    }
 }
