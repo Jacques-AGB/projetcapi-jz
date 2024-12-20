@@ -47,14 +47,15 @@ Couverture des tests unitaires sur :
 Les services métier.
 Les contrôleurs backend.
 Les interactions avec la base de données.
-Tests d'intégration avec Spring Boot Test.
+
 🌟 Perspectives
 Améliorations futures :
 Déploiement sur une plateforme cloud (AWS, Heroku, Netlify).
 Optimisation de la gestion en temps réel des joueurs.
-Documentation approfondie pour le frontend.
+
+
 🤝 Contributeurs
-Projet réalisé en binôme suivant les principes du pair programming.
+Projet réalisé en binôme suivant les principes du pair programming
 
 📜 Licence
 MIT
