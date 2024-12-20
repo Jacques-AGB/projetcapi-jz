@@ -11,4 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 public class BacklogRequest {
     private List<AssignmentRequest> assignments;
+
+    public List<AssignmentRequest> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<AssignmentRequest> assignments) {
+        this.assignments = assignments;
+    }
 }

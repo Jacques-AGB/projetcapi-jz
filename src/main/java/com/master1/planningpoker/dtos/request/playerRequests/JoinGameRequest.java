@@ -19,6 +19,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class JoinGameRequest {
     private String pseudo;
     private String code;
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
     @JsonProperty("isAdmin")
     private boolean isAdmin; // Champs isAdmin
 

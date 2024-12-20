@@ -16,6 +16,53 @@ import java.util.List;
 @Entity
 @Data
 public class Game {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public List<Assignment> getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(List<Assignment> backlog) {
+        this.backlog = backlog;
+    }
+
+    public Rule getRule() {
+        return rule;
+    }
+
+    public void setRule(Rule rule) {
+        this.rule = rule;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

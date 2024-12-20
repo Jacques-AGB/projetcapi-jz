@@ -30,4 +30,12 @@ public class GameResponse {
     private Long ruleId;
     private List<Player> players; // Pseudos des joueurs
     private List<Assignment> backlog;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
