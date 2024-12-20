@@ -12,12 +12,13 @@ Le projet CAPI est une application de Planning Poker, développée pour simplifi
 🚀 Technologies Utilisées
 
 Backend
-Langage : Java
-Framework : Spring Boot
-Base de données : PostgreSQL
+- Langage : Java
+- Framework : Spring Boot
+- Base de données : PostgreSQL
+- 
 Frontend
-Langage : TypeScript
-Framework : Angular
+- Langage : TypeScript
+- Framework : Angular
 
 🏗️ Architecture
 
@@ -32,7 +33,9 @@ Base de données : Stockage des entités de l'application.
 Backend
 API RESTful pour la gestion des parties, des joueurs, des votes et des règles.
 Documentation des endpoints et modèles via Doxygen.
+
 Frontend
+
 Interface intuitive pour créer des parties, voter et visualiser les résultats.
 Consommation des APIs backend via HttpClient.
 
