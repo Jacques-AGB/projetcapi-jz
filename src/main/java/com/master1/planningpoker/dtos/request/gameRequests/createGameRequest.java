@@ -1,9 +1,7 @@
 package com.master1.planningpoker.dtos.request.gameRequests;
 
 import com.master1.planningpoker.dtos.request.assignmentRequest.AssignmentRequest;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 

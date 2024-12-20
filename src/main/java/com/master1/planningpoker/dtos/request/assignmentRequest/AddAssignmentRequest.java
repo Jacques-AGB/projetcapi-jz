@@ -25,4 +25,7 @@ public class AddAssignmentRequest {
     private Integer difficulty;
     private Long gameId;
 
+    public AddAssignmentRequest() {
+
+    }
 }

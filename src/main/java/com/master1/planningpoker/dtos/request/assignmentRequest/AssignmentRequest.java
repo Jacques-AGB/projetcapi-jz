@@ -12,4 +12,8 @@ public class AssignmentRequest {
     private String description;
     private Integer difficulty;
     private Long gameId;
+
+    public AssignmentRequest() {
+
+    }
 }
