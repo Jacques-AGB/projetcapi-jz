@@ -1,8 +1,11 @@
 package com.master1.planningpoker.dtos.request.gameRequests;
 
+import com.master1.planningpoker.dtos.request.assignmentRequest.AssignmentRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 
 /**
@@ -20,5 +23,6 @@ public class createGameRequest {
         private String code;
         private int maxPlayers;
         private Long ruleId;
+        private List<AssignmentRequest> backlog;
 
 }

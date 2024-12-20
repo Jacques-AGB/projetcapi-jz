@@ -41,6 +41,9 @@ public class PlayerController {
      */
     @PostMapping("/join")
     public ResponseEntity<Map<String, Object>> joinGame(@RequestBody @Valid JoinGameRequest request) {
+        // Log pour vérifier les valeurs reçues
+        System.out.println("Received JoinGameRequest: " + request);
+
         // Appel au service pour ajouter le joueur
         String response = playerService.joinGame(request);
 
@@ -48,7 +51,7 @@ public class PlayerController {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", "success");
         responseMap.put("message", response);
-        responseMap.put("gameCode", request.getCode());  // Ajout du code de la partie dans la réponse
+        responseMap.put("gameCode", request.getCode());
 
         // Retourner une réponse HTTP avec le corps contenant le message et le code
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);

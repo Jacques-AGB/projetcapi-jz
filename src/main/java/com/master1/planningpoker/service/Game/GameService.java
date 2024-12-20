@@ -7,6 +7,7 @@ import com.master1.planningpoker.models.Game;
 import com.master1.planningpoker.models.Rule;
 import com.master1.planningpoker.repositories.GameRepository;
 import com.master1.planningpoker.repositories.RuleRepository;
+import com.master1.planningpoker.service.Assignment.AssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class GameService implements IGameService{
     @Autowired
     private final GameMapper gameMapper;
 
+    @Autowired
+    private final AssignmentService assignmentService;
+
     /**
      * Crée ou modifie un jeu selon les informations spécifiées dans la requête.
      * Si un jeu existe déjà avec l'ID fourni, il sera mis à jour. Sinon, un nouveau jeu sera créé.
@@ -43,21 +47,33 @@ public class GameService implements IGameService{
      */
     @Override
     public GameResponse createEditGame(createGameRequest request) {
+        // Validation du nombre de joueurs
         if (request.getMaxPlayers() <= 0) {
             throw new IllegalArgumentException("The maximum number of players must be greater than 0.");
         }
+
+        // Vérifier l'existence de la règle
         boolean exists = ruleRepository.existsById(request.getRuleId());
         if (!exists) {
-            throw new IllegalArgumentException("The rule : " + request.getRuleId() + " doesn't exists.");
+            throw new IllegalArgumentException("The rule : " + request.getRuleId() + " doesn't exist.");
         }
-        if (request.getId() == null){
+
+        // Traitement de la création ou de la modification du jeu
+        if (request.getId() == null) {
             // Générer un code unique pour le jeu
             String code = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
             request.setCode(code);
             Game newGame = gameMapper.toEntity(request);
             Game savedGame = gameRepository.save(newGame);
+
+            // Si un backlog est fourni, sauvegardez les tâches associées
+            if (request.getBacklog() != null && !request.getBacklog().isEmpty()) {
+                assignmentService.saveBacklog(request.getBacklog(), savedGame.getId()); // Passer l'ID du jeu
+            }
+
             return gameMapper.toResponse(savedGame);
         } else {
+            // Modification d'un jeu existant
             Game existingGame = gameRepository.findById(request.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Game not found with id: " + request.getId()));
 
@@ -68,6 +84,12 @@ public class GameService implements IGameService{
             existingGame.setMaxPlayers(request.getMaxPlayers());
             existingGame.setRule(rule);
             Game updatedGame = gameRepository.save(existingGame);
+
+            // Si un backlog est fourni, sauvegardez les tâches associées
+            if (request.getBacklog() != null && !request.getBacklog().isEmpty()) {
+                assignmentService.saveBacklog(request.getBacklog(), updatedGame.getId()); // Passer l'ID du jeu
+            }
+
             return gameMapper.toResponse(updatedGame);
         }
     }

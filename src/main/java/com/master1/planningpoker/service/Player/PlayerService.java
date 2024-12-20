@@ -43,6 +43,7 @@ public class PlayerService implements IPlayerService {
      */
     @Override
     public String joinGame(JoinGameRequest request) {
+        // Vérification des valeurs des champs
         if (request.getPseudo() == null || request.getPseudo().isEmpty()) {
             throw new IllegalArgumentException("Pseudo cannot be null or empty");
         }
@@ -50,15 +51,19 @@ public class PlayerService implements IPlayerService {
         if (request.getCode() == null || request.getCode().isEmpty()) {
             throw new IllegalArgumentException("Game code cannot be null or empty");
         }
+        System.out.println("Received isAdmin value: " + request.isAdmin());  // Affiche la valeur de isAdmin
 
+        // Récupérer le jeu par son code
         Game game = gameRepository.findByCode(request.getCode())
                 .orElseThrow(() -> new IllegalArgumentException("Game not found for code: " + request.getCode()));
 
+        // Vérifier si le jeu a atteint le nombre maximum de joueurs
         int numPlayer = game.getPlayers().size();
         if (numPlayer == game.getMaxPlayers()) {
-            throw new RuntimeException("The limit of player is reached");
+            throw new RuntimeException("The limit of players is reached");
         }
 
+        // Vérifier si le joueur existe déjà dans le jeu
         boolean playerExist = game.getPlayers().stream()
                 .anyMatch(player -> player.getPseudo().equals(request.getPseudo()));
 
@@ -66,15 +71,22 @@ public class PlayerService implements IPlayerService {
             throw new IllegalArgumentException("A player with this pseudo is already in the game");
         }
 
+        // Créer un nouveau joueur
         Player newPlayer = new Player();
         newPlayer.setPseudo(request.getPseudo());
         newPlayer.setGame(game);
+
+        // Assigner le rôle admin au joueur en fonction de `isAdmin` dans la requête
+        newPlayer.setAdmin(request.isAdmin());  // Utiliser directement request.isAdmin()
+
+        // Ajouter le nouveau joueur au jeu
         game.getPlayers().add(newPlayer);
+
+        // Sauvegarder le jeu avec le nouveau joueur
         gameRepository.save(game);
 
         return "Player " + request.getPseudo() + " has successfully joined the game with code: " + request.getCode();
     }
-
     /**
      * Crée ou met à jour un joueur en fonction des informations fournies dans la requête.
      * Si un joueur avec le même pseudo existe déjà, une exception est lancée.

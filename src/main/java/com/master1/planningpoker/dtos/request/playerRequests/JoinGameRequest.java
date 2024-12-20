@@ -3,6 +3,7 @@ package com.master1.planningpoker.dtos.request.playerRequests;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
@@ -18,4 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class JoinGameRequest {
     private String pseudo;
     private String code;
+    @JsonProperty("isAdmin")
+    private boolean isAdmin; // Champs isAdmin
+
 }

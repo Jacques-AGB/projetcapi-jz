@@ -2,6 +2,8 @@ package com.master1.planningpoker.service.Assignment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master1.planningpoker.dtos.request.assignmentRequest.AddAssignmentRequest;
+import com.master1.planningpoker.dtos.request.assignmentRequest.AssignmentRequest;
+import com.master1.planningpoker.dtos.request.assignmentRequest.BacklogRequest;
 import com.master1.planningpoker.dtos.responses.assignmentResponses.AssignmentResponse;
 import com.master1.planningpoker.mappers.assignmentMapper.AssignmentMapper;
 import com.master1.planningpoker.models.Assignment;
@@ -223,21 +225,28 @@ public class AssignmentService implements IAssignmentService {
      * @param filePath Le chemin du fichier JSON contenant les assignments.
      * @throws RuntimeException si une erreur survient lors du chargement du fichier.
      */
+
+    /**
+     * Sauvegarde le backlog (liste d'assignments) dans la base de données.
+     *
+     * @param backlogRequest La requête contenant les informations du backlog.
+     */
     @Override
-    public void loadBacklogFromJson(Long gameId, String filePath) {
+    public void saveBacklog(List<AssignmentRequest> backlogRequest, Long gameId) {
+        // Trouver le jeu auquel ces assignations sont liées
         Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new IllegalArgumentException("Game not found for the given ID: " + gameId));
+                .orElseThrow(() -> new IllegalArgumentException("Game not found with id: " + gameId));
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            List<Assignment> assignments = List.of(objectMapper.readValue(new File(filePath), Assignment[].class));
+        for (AssignmentRequest assignmentRequest : backlogRequest) {
+            // Créer une nouvelle assignation à partir des données reçues
+            Assignment assignment = new Assignment();
+            assignment.setLibelle(assignmentRequest.getLibelle());
+            assignment.setDescription(assignmentRequest.getDescription());
+            assignment.setDifficulty(assignmentRequest.getDifficulty());
+            assignment.setGame(game);  // Lier l'assignation au jeu
 
-            for (Assignment assignment : assignments) {
-                assignment.setGame(game);
-                assignmentRepository.save(assignment);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load backlog from file: " + e.getMessage());
+            // Sauvegarder l'assignation dans la base de données
+            assignmentRepository.save(assignment);
         }
     }
 }
