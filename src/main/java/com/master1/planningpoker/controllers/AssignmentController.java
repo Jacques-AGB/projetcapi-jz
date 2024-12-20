@@ -1,8 +1,6 @@
 package com.master1.planningpoker.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master1.planningpoker.dtos.request.assignmentRequest.AddAssignmentRequest;
-import com.master1.planningpoker.dtos.request.assignmentRequest.AssignmentRequest;
 import com.master1.planningpoker.dtos.responses.assignmentResponses.AssignmentResponse;
 import com.master1.planningpoker.service.Assignment.AssignmentService;
 import jakarta.validation.Valid;
@@ -10,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 
@@ -59,6 +54,16 @@ public class AssignmentController {
     public ResponseEntity<List<AssignmentResponse>> getBacklog(@PathVariable Long gameId) {
         List<AssignmentResponse> backlog = assignmentService.getBacklog(gameId);
         return ResponseEntity.ok(backlog);
+    }
+
+    @PostMapping("/backlog/upload/{gameId}")
+    public ResponseEntity<String> uploadBacklog(@PathVariable Long gameId, @RequestParam("file") MultipartFile file) {
+        try {
+            assignmentService.loadBacklogFromJson(gameId, file);
+            return ResponseEntity.ok("Backlog uploaded and assignments added successfully to game ID: " + gameId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error uploading backlog: " + e.getMessage());
+        }
     }
 
     /**
@@ -125,58 +130,18 @@ public class AssignmentController {
      * @param gameId L'ID du jeu dont le backlog des tâches doit être sauvegardé.
      * @return Un message de confirmation de la sauvegarde du backlog.
      */
-    @PostMapping("/backlog/save/{gameId}")
-    public ResponseEntity<String> saveBacklogToJson(
-            @PathVariable Long gameId) {
-        String response = assignmentService.saveBacklogToJson(gameId);
-        return ResponseEntity.ok("Backlog successfully saved here :"+ response );
-    }
+
+
 
     /**
-     * Charge le backlog depuis un fichier JSON et l'associe au jeu via gameId.
+     * @brief Charge un backlog de tâches pour un jeu spécifique depuis un fichier JSON.
      *
-     * @param gameId    L'ID du jeu auquel les tâches doivent être associées.
-     * @param filePath  Le chemin du fichier JSON contenant les tâches.
-     * @return          La réponse HTTP avec un message de succès ou d'erreur.
-     */
-    @PostMapping("/load")
-    public ResponseEntity<String> loadBacklogFromJson(
-            @RequestParam Long gameId,
-            @RequestParam String filePath) {
-        try {
-            // Lire le contenu du fichier JSON depuis le chemin spécifié
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-
-            // Analyser le contenu JSON en une liste d'objets AssignmentRequest
-            List<AssignmentRequest> backlog = parseBacklogJson(content);
-
-            // Sauvegarder les tâches dans la base de données et les associer au jeu
-            assignmentService.saveBacklog(backlog, gameId);
-
-            // Retourner une réponse de succès
-            return ResponseEntity.ok("Backlog successfully loaded from " + filePath);
-        } catch (IOException e) {
-            // En cas d'erreur lors de la lecture du fichier
-            return ResponseEntity.status(500).body("Error reading file: " + e.getMessage());
-        } catch (Exception e) {
-            // En cas d'erreur générale (par exemple, format du fichier incorrect)
-            return ResponseEntity.status(500).body("Error processing backlog: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Méthode utilitaire pour analyser un fichier JSON en une liste de tâches (AssignmentRequest).
+     * Cette méthode permet de charger un backlog de tâches pour un jeu spécifique depuis un fichier JSON.
      *
-     * @param jsonContent  Le contenu du fichier JSON sous forme de chaîne.
-     * @return             Une liste d'objets AssignmentRequest.
-     * @throws Exception   Si le format du JSON est invalide.
+     * @param gameId L'ID du jeu pour lequel le backlog doit être chargé.
+     * @param filePath Le chemin du fichier JSON contenant les tâches à charger.
+     * @return Un message de confirmation de l'importation du backlog.
      */
-    private List<AssignmentRequest> parseBacklogJson(String jsonContent) throws Exception {
-        // Utiliser une bibliothèque comme Jackson ou Gson pour analyser le JSON
-        // Exemple avec Jackson:
-        ObjectMapper objectMapper = new ObjectMapper();
-        // Liez le contenu JSON à une liste d'AssignmentRequest
-        return objectMapper.readValue(jsonContent, objectMapper.getTypeFactory().constructCollectionType(List.class, AssignmentRequest.class));
-    }
+
 
 }

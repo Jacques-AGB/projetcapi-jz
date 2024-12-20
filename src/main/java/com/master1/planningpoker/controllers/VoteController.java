@@ -47,18 +47,29 @@ public class VoteController {
         Map<String, String> response = new HashMap<>();
 
         try {
+            // Log d'entrée pour déboguer les données envoyées
+            System.out.println("Submitting vote: " + request);
+
             // Appeler la fonction submitVote du service (voteService)
             String voteResponse = voteService.submitVote(request);
 
             // Ajouter la réponse du vote dans le JSON
             response.put("message", voteResponse);
 
-
             // Retourner la réponse avec un statut 201 CREATED
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (IllegalArgumentException e) {
+            // Gestion des erreurs liées aux données invalides
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
         } catch (Exception e) {
-            // En cas d'erreur, vous pouvez gérer l'exception ici et envoyer une réponse d'erreur
-            response.put("error", "An error occurred while submitting the vote.");
+            // Log l'exception pour un meilleur débogage
+            e.printStackTrace();
+
+            // Ajouter des détails sur l'erreur pour les développeurs
+            response.put("error", "An unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
