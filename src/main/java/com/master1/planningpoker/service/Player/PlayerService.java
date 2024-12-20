@@ -41,6 +41,8 @@ public class PlayerService implements IPlayerService {
      * @throws IllegalArgumentException si le pseudo ou le code du jeu est invalide ou si le joueur existe déjà dans le jeu.
      * @throws RuntimeException si le nombre maximal de joueurs a été atteint.
      */
+
+
     @Override
     public String joinGame(JoinGameRequest request) {
         // Vérification des valeurs des champs
@@ -87,6 +89,8 @@ public class PlayerService implements IPlayerService {
 
         return "Player " + request.getPseudo() + " has successfully joined the game with code: " + request.getCode();
     }
+
+
     /**
      * Crée ou met à jour un joueur en fonction des informations fournies dans la requête.
      * Si un joueur avec le même pseudo existe déjà, une exception est lancée.
