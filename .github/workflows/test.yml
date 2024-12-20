@@ -1,1 +1,28 @@
+name: Tests unitaire Java
+on:
+  push:
+    branches:
+      - backend-*  # Déclenche l'action sur toutes les branches dont le nom commence par backend-
+  pull_request:
+    branches:
+      - main  # Déclenche l'action pour toutes les PRs destinées à la branche main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Utilise l'environnement Ubuntu pour exécuter les tests
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # Vérifie le code de votre dépôt
+
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'  # Configure Java 17
+
+    - name: Run maven with tests
+      run: mvn clean package  # Exécute les tests unitaires avec Maven
+      env:
+        CI: true  # Permet d'activer le mode CI pour Maven (utile pour certaines configurations)
 
