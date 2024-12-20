@@ -40,13 +40,12 @@
                 </div>
 
 
-                <!-- Bouton pour charger un fichier Backlog -->
                 <div class="form-group">
                   <input 
                     type="file" 
                     class="form-style" 
-                  
                     name="backlogFile"
+                    (change)="onFileSelected($event)"
                   />
                 </div>
 
@@ -55,9 +54,7 @@
                   <select class="form-style" [(ngModel)]="gameMode" name="gameMode">
                     <option value="1">Unanimité</option>
                     <option value="2">Moyenne</option>
-                    <option value="3">Médiane</option>
-                    <option value="4">Majorité absolue</option>
-                    <option value="17">Majorité relative</option>
+                   
                   </select>
                 </div>
 

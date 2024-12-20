@@ -1,10 +1,20 @@
-
 <div class="container mt-5">
   <!-- Titre et code de la partie -->
   <div class="text-center mb-4">
     <h1>Partie de Planning Poker</h1>
     <h4>Code de la Partie : <span class="game-code">{{ gameCode }}</span></h4>
-    <p>Pseudo du joueur: {{ pseudo }}</p>
+    <p>Pseudo du joueur : {{ pseudo }}</p>
+  </div>
+
+  <!-- Description de l'assignation actuelle -->
+  <div class="assignment-description text-center mb-4">
+    <h3>l'Assignation Actuelle :</h3>
+    <p *ngIf="assignments.length > 0; else noAssignments">
+      {{ assignments[currentAssignmentIndex]?.description }}
+    </p>
+    <ng-template #noAssignments>
+      <p>Aucune assignation n'est disponible pour cette partie.</p>
+    </ng-template>
   </div>
 
   <!-- Section des cartes -->
@@ -14,20 +24,20 @@
       <button
         *ngFor="let card of cards"
         class="card"
-        (click)="selectCard(card)"  
+        (click)="selectCard(card)"
       >
         {{ card }}
       </button>
     </div>
   </div>
 
+  <!-- Section des votes -->
   <div class="votes mt-5">
     <h3 class="text-center">Votes des Joueurs :</h3>
     <ul class="list-group">
       <li *ngFor="let vote of votes" class="list-group-item">
-        {{ vote.player }} a voté : {{vote.card}}
+        {{ vote.player }} a voté : {{ vote.card }}
       </li>
     </ul>
   </div>
 </div>
-
