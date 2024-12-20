@@ -1,10 +1,9 @@
 package com.master1.planningpoker.service.Assignment;
 
 import com.master1.planningpoker.dtos.request.assignmentRequest.AddAssignmentRequest;
-import com.master1.planningpoker.dtos.request.assignmentRequest.AssignmentRequest;
-import com.master1.planningpoker.dtos.request.assignmentRequest.BacklogRequest;
 import com.master1.planningpoker.dtos.responses.assignmentResponses.AssignmentResponse;
 import com.master1.planningpoker.models.Assignment;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -74,7 +73,12 @@ public interface IAssignmentService {
      */
     List<AssignmentResponse> getBacklog(Long gameId);
 
-
-
-    void saveBacklog(List<AssignmentRequest> backlogRequest, Long gameId);
+    /**
+     * Charge un backlog d'assignments à partir d'un fichier JSON et les ajoute au jeu spécifié.
+     *
+     * @param gameId  L'identifiant du jeu auquel les assignments doivent être ajoutés.
+     * @param filePath Le chemin du fichier JSON contenant les assignments.
+     * @throws RuntimeException si une erreur survient lors de la lecture du fichier ou de l'ajout des assignments.
+     */
+    void loadBacklogFromJson(Long gameId, MultipartFile filePath);
 }

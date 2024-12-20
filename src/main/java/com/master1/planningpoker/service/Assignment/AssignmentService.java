@@ -1,9 +1,7 @@
 package com.master1.planningpoker.service.Assignment;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master1.planningpoker.dtos.request.assignmentRequest.AddAssignmentRequest;
-import com.master1.planningpoker.dtos.request.assignmentRequest.AssignmentRequest;
-import com.master1.planningpoker.dtos.request.assignmentRequest.BacklogRequest;
 import com.master1.planningpoker.dtos.responses.assignmentResponses.AssignmentResponse;
 import com.master1.planningpoker.mappers.assignmentMapper.AssignmentMapper;
 import com.master1.planningpoker.models.Assignment;
@@ -13,7 +11,7 @@ import com.master1.planningpoker.repositories.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -125,56 +123,51 @@ public class AssignmentService implements IAssignmentService {
      * @throws IllegalArgumentException si le jeu n'existe pas.
      * @throws RuntimeException si une erreur se produit lors de la création du fichier.
      */
-    @Override
+
+
     public String saveBacklogToJson(Long gameId) {
         // Vérifie si le jeu existe
-        boolean gameExists = gameRepository.existsById(gameId);
-        if (!gameExists) {
-            throw new IllegalArgumentException("Game not found for the given ID: " + gameId);
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new IllegalArgumentException("Game with id: " + gameId + " not found"));
+
+        // Récupère les assignments associés au jeu
+        List<Assignment> assignments = assignmentRepository.findAllByGameId(gameId);
+
+        // Vérifie si le backlog est vide
+        if (assignments.isEmpty()) {
+            throw new IllegalArgumentException("Le backlog du jeu est vide.");
         }
 
-        // Récupère le backlog spécifique du jeu
-        List<Assignment> backlog = assignmentRepository.findAllByGameId(gameId);
-
-        List<Map<String, Object>> backlogWithGameId = backlog.stream().map(assignment -> {
-            Map<String, Object> assignmentMap = new HashMap<>();
-            assignmentMap.put("id", assignment.getId());
-            assignmentMap.put("libelle", assignment.getLibelle());
-            assignmentMap.put("description", assignment.getDescription());
-            assignmentMap.put("difficulty", assignment.getDifficulty());
-            assignmentMap.put("gameId", gameId);
-            // Ajouter les votes
-            assignmentMap.put("votes", assignment.getVotes().stream().map(vote -> {
-                Map<String, Object> voteMap = new HashMap<>();
-                voteMap.put("id", vote.getId());
-                voteMap.put("value", vote.getValue());
-                voteMap.put("player", Map.of(
-                        "id", vote.getPlayer().getId(),
-                        "pseudo", vote.getPlayer().getPseudo(),
-                        "admin", vote.getPlayer().isAdmin()
-                ));
-                return voteMap;
-            }).collect(Collectors.toList()));
-            return assignmentMap;
-        }).collect(Collectors.toList());
-
-        // Crée et sauvegarde le backlog dans un fichier JSON
+        // Crée le répertoire pour sauvegarder le fichier JSON (si nécessaire)
         Path downloadDir = Paths.get(System.getProperty("user.home"), "Downloads", "backlog");
         File backlogDir = downloadDir.toFile();
         if (!backlogDir.exists() && !backlogDir.mkdirs()) {
-            throw new RuntimeException("Failed to create backlog directory: " + backlogDir.getAbsolutePath());
+            throw new RuntimeException("Impossible de créer le répertoire pour sauvegarder le backlog.");
         }
 
+        // Crée le nom du fichier en fonction de l'ID du jeu
         String fileName = "backlog_" + gameId + ".json";
         File filePath = new File(backlogDir, fileName);
+
+        // Utilise ObjectMapper pour convertir les assignments en JSON
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.writeValue(filePath, backlogWithGameId);
+            // Convertir les assignments en liste d'AssignmentResponse
+            List<AssignmentResponse> assignmentResponses = assignments.stream()
+                    .map(assignmentMapper::toResponse)
+                    .collect(Collectors.toList());
+
+            // Sauvegarde la liste d'assignments dans un fichier JSON
+            objectMapper.writeValue(filePath, assignmentResponses);
+
+            System.out.println("Backlog du jeu avec id " + gameId + " sauvegardé sous le fichier : " + filePath.getAbsolutePath());
             return filePath.getAbsolutePath();
+
         } catch (IOException e) {
-            throw new RuntimeException("Failed to write backlog to file: " + e.getMessage(), e);
+            throw new RuntimeException("Erreur lors de la sauvegarde du backlog en fichier JSON.", e);
         }
     }
+
 
 
     /**
@@ -218,6 +211,7 @@ public class AssignmentService implements IAssignmentService {
                 .collect(Collectors.toList());
     }
 
+
     /**
      * Charge un backlog d'assignments à partir d'un fichier JSON et les ajoute à un jeu.
      *
@@ -226,27 +220,33 @@ public class AssignmentService implements IAssignmentService {
      * @throws RuntimeException si une erreur survient lors du chargement du fichier.
      */
 
-    /**
-     * Sauvegarde le backlog (liste d'assignments) dans la base de données.
-     *
-     * @param backlogRequest La requête contenant les informations du backlog.
-     */
-    @Override
-    public void saveBacklog(List<AssignmentRequest> backlogRequest, Long gameId) {
-        // Trouver le jeu auquel ces assignations sont liées
+
+
+    public void loadBacklogFromJson(Long gameId, MultipartFile file) {
+        // Vérifie si le jeu existe
         Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new IllegalArgumentException("Game not found with id: " + gameId));
+                .orElseThrow(() -> new IllegalArgumentException("Game with id: " + gameId + " not found"));
 
-        for (AssignmentRequest assignmentRequest : backlogRequest) {
-            // Créer une nouvelle assignation à partir des données reçues
-            Assignment assignment = new Assignment();
-            assignment.setLibelle(assignmentRequest.getLibelle());
-            assignment.setDescription(assignmentRequest.getDescription());
-            assignment.setDifficulty(assignmentRequest.getDifficulty());
-            assignment.setGame(game);  // Lier l'assignation au jeu
+        try {
+            // Lire le fichier JSON directement à partir du MultipartFile
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Assignment> assignments = objectMapper.readValue(file.getInputStream(), new TypeReference<List<Assignment>>() {});
 
-            // Sauvegarder l'assignation dans la base de données
-            assignmentRepository.save(assignment);
+            // Assurez-vous que le backlog n'est pas vide
+            if (assignments.isEmpty()) {
+                throw new IllegalArgumentException("Le fichier backlog est vide.");
+            }
+
+            // Ajoutez chaque assignment au jeu
+            for (Assignment assignment : assignments) {
+                assignment.setGame(game);  // Associez l'assignation au jeu
+                assignmentRepository.save(assignment);  // Sauvegardez l'assignation dans la base de données
+            }
+
+            System.out.println("Backlog chargé avec succès pour le jeu avec id : " + gameId);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Erreur lors de la lecture du fichier backlog JSON", e);
         }
     }
 }
