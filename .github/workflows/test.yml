@@ -19,7 +19,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '17'  # Configure Java 17
+        java-version: '23'  # Configure Java 17
 
     - name: Run maven with tests
       run: mvn clean package  # Exécute les tests unitaires avec Maven
